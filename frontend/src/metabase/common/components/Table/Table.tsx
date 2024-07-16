@@ -14,7 +14,7 @@ export type TableProps<Row extends BaseRow> = {
   columns: ColumnItem[];
   rows: Row[];
   rowRenderer: (row: Row) => React.ReactNode;
-  tableProps?: React.HTMLAttributes<HTMLTableElement>;
+  tableProps?: React.HTMLAttributes<HTMLTableElement> & { className: string };
 };
 
 /**

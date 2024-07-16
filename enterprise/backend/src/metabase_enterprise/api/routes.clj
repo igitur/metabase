@@ -55,8 +55,13 @@
     "/serialization" []
     (ee.api.common/+require-premium-feature :serialization (deferred-tru "Serialization") api.serialization/routes))
    (context
+<<<<<<< HEAD
     "/query-reference-validation" []
      (ee.api.common/+require-premium-feature :query-reference-validation (deferred-tru "Query Reference Validation") api.query-reference-validation/routes))
+=======
+    "/query-field-validation" []
+     (ee.api.common/+require-premium-feature :serialization (deferred-tru "Serialization") api.query-field-validation/routes))
+>>>>>>> 580eb5fe74 (temp)
    (context
      "/upload-management" []
      (ee.api.common/+require-premium-feature :upload-management (deferred-tru "Upload Management") api.uploads/routes))))
