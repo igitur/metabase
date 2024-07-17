@@ -1,8 +1,10 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
+import { ControlledTable } from "./ControlledTable";
 import { Table } from "./Table";
 
-export const StyledTable = styled(Table)`
+const tableCSS = css`
   width: 100%;
   border-collapse: unset;
   border-spacing: 0;
@@ -36,6 +38,15 @@ export const StyledTable = styled(Table)`
   th {
     padding-inline-start: 1rem;
   }
+`;
+
+export const StyledTable = styled(Table)`
+  ${tableCSS}
 ` as typeof Table;
+
+export const StyledControlledTable = styled(ControlledTable)`
+  ${tableCSS}
+` as typeof ControlledTable;
+
 // we have to cast this because emotion messes up the generic types here
 // see https://github.com/emotion-js/emotion/issues/2342

@@ -1,5 +1,9 @@
 import { Api } from "metabase/api";
-import type { Card } from "metabase-types/api";
+import type {
+  Card,
+  PaginationRequest,
+  PaginationResponse,
+} from "metabase-types/api";
 
 type invalidCard = Card & {
   errors: {
@@ -8,17 +12,20 @@ type invalidCard = Card & {
 };
 export type invalidCardResponse = {
   data: invalidCard[];
-  total: number;
-  limit: number;
-  offset: number;
-};
+} & PaginationResponse;
+
+export type invalidCardRequest = {
+  sort_direction?: "asc" | "desc";
+  sort_column?: string;
+} & PaginationRequest;
 
 export const queryValidationAPI = Api.injectEndpoints({
   endpoints: builder => ({
-    getInvalidCards: builder.query<invalidCardResponse, void>({
-      query: () => ({
+    getInvalidCards: builder.query<invalidCardResponse, invalidCardRequest>({
+      query: params => ({
         method: "GET",
         url: "/api/ee/query-field-validation/invalid-cards",
+        params,
       }),
     }),
   }),
