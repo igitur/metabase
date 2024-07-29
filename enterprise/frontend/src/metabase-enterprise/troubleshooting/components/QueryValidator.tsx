@@ -13,6 +13,8 @@ import * as Urls from "metabase/lib/urls";
 import { Title, Box, Icon, Flex, Button } from "metabase/ui";
 import { useGetInvalidCardsQuery } from "metabase-enterprise/api/query-validation";
 
+import { formatErrorString } from "../utils";
+
 const COLUMNS = [
   { name: "Question", key: "name", sortable: true },
   { name: "Error", key: "error" },
@@ -43,9 +45,7 @@ export const QueryValidator = () => {
         name: d.name,
         created_by: d.creator?.common_name,
         collection: d.collection?.name || "root",
-        error: `Field ${d.errors["inactive-fields"]
-          .map(f => f.field)
-          .join(", ")} is invalid`,
+        error: formatErrorString(d.errors),
         last_edited_at: d.updated_at,
         id: _.uniqueId("broken_card"),
         icon: d.display,
@@ -74,7 +74,7 @@ export const QueryValidator = () => {
             }}
             onClick={() => setCollectionPickerOpen(true)}
           >
-            All Collections
+            {t`All Collections`}
           </Button>
         </Flex>
         <StyledControlledTable
@@ -114,11 +114,11 @@ const QueryValidatorRow = ({ row }: { row: any }) => {
     <tr>
       <td className={`${CS.textBold} ${CS.py2}`}>
         <Link to={row.link}>
-          <Ellipsified>
+          <Ellipsified style={{ color: "var(--mb-color-brand)" }}>
             {row.icon && (
               <Icon
                 name={row.icon}
-                style={{ verticalAlign: "bottom", marginInlineEnd: "0.25rem" }}
+                style={{ verticalAlign: "bottom", marginInlineEnd: "0.75rem" }}
               />
             )}
             {row.name}

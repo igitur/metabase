@@ -5,13 +5,13 @@ import type {
   PaginationResponse,
 } from "metabase-types/api";
 
-type invalidCard = Card & {
-  errors: {
-    "inactive-fields": any[];
-  };
+export type CardError = {
+  field: string;
+  table: string;
+  type: "inactive-field";
 };
 export type invalidCardResponse = {
-  data: invalidCard[];
+  data: (Card & { errors: CardError[] })[];
 } & PaginationResponse;
 
 export type invalidCardRequest = {
@@ -24,7 +24,7 @@ export const queryValidationAPI = Api.injectEndpoints({
     getInvalidCards: builder.query<invalidCardResponse, invalidCardRequest>({
       query: params => ({
         method: "GET",
-        url: "/api/ee/query-field-validation/invalid-cards",
+        url: "/api/ee/query-reference-validation/invalid-cards",
         params,
       }),
     }),
