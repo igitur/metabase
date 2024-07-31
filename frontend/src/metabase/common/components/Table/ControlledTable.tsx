@@ -44,11 +44,11 @@ export function ControlledTable<Row extends BaseRow>({
   page,
   onPageChange,
   totalItems,
-  ...tableProps
+  ...rest
 }: TableProps<Row>) {
   return (
     <>
-      <table {...tableProps}>
+      <table {...rest}>
         <thead>
           <tr>
             {columns.map(column => (

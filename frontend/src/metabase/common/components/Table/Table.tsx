@@ -1,7 +1,6 @@
 import React from "react";
 
-import { color } from "metabase/lib/colors";
-import { Box, Flex, Icon } from "metabase/ui";
+import { ControlledTable } from "./ControlledTable";
 
 type BaseRow = Record<string, unknown> & { id: number | string };
 
@@ -29,7 +28,8 @@ export function Table<Row extends BaseRow>({
   columns,
   rows,
   rowRenderer,
-  ...tableProps
+  tableProps,
+  ...rest
 }: TableProps<Row>) {
   const [sortColumn, setSortColumn] = React.useState<string | null>(null);
   const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
@@ -59,72 +59,20 @@ export function Table<Row extends BaseRow>({
   }, [rows, sortColumn, sortDirection]);
 
   return (
-    <table {...tableProps}>
-      <thead>
-        <tr>
-          {columns.map(column => (
-            <th key={String(column.key)}>
-              <ColumnHeader
-                column={column}
-                sortColumn={sortColumn}
-                sortDirection={sortDirection}
-                onSort={(columnKey: string, direction: "asc" | "desc") => {
-                  setSortColumn(columnKey);
-                  setSortDirection(direction);
-                }}
-              />
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedRows.map((row, index) => (
-          <React.Fragment key={String(row.id) || index}>
-            {rowRenderer(row)}
-          </React.Fragment>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
-function ColumnHeader({
-  column,
-  sortColumn,
-  sortDirection,
-  onSort,
-}: {
-  column: ColumnItem;
-  sortColumn: string | null;
-  sortDirection: "asc" | "desc";
-  onSort: (column: string, direction: "asc" | "desc") => void;
-}) {
-  return (
-    <Flex
-      gap="sm"
-      align="center"
-      style={{ cursor: "pointer" }}
-      onClick={() =>
-        onSort(
-          String(column.key),
-          sortColumn === column.key && sortDirection === "asc" ? "desc" : "asc",
-        )
+    <ControlledTable
+      rows={sortedRows}
+      columns={columns}
+      rowRenderer={rowRenderer}
+      onSort={({ name, direction }) => {
+        setSortColumn(name);
+        setSortDirection(direction);
+      }}
+      tableProps={tableProps}
+      sortColumn={
+        sortColumn ? { name: sortColumn, direction: sortDirection } : undefined
       }
-    >
-      {column.name}
-      {
-        column.name && column.key === sortColumn ? (
-          <Icon
-            name={sortDirection === "desc" ? "chevronup" : "chevrondown"}
-            color={color("text-medium")}
-            style={{ flexShrink: 0 }}
-            size={8}
-          />
-        ) : (
-          <Box w="8px" />
-        ) // spacer to keep the header the same size regardless of sort status
-      }
-    </Flex>
+      {...rest}
+    />
   );
 }
 
