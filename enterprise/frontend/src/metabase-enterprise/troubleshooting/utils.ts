@@ -11,5 +11,7 @@ export const formatErrorString = (errors: CardError[]) => {
     return t`Field ${inactiveFields
       .map(field => field.field)
       .join(", ")} is inactive`;
+  } else {
+    return "I don't know what's wrong, but it's broken";
   }
 };
