@@ -139,6 +139,7 @@
     "@loki/create-async-callback": "^0.35.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@sinonjs/fake-timers": "^9.1.2",
+    "@size-limit/preset-app": "^11.1.4",
     "@storybook/addon-a11y": "^6.5.16",
     "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
@@ -290,6 +291,7 @@
     "reg-cli": "^0.17.7",
     "semver": "^7.6.3",
     "shadow-cljs": "2.27.4",
+    "size-limit": "^11.1.4",
     "source-map-loader": "^4.0.1",
     "storybook-addon-pseudo-states": "^3.1.1",
     "stylelint": "^16.2.1",
@@ -340,6 +342,7 @@
     "build-release:js": "WEBPACK_BUNDLE=production NODE_OPTIONS=--max-old-space-size=8196 webpack --bail",
     "build-release:sdk": "WEBPACK_BUNDLE=production webpack --config webpack.embedding-sdk.config.js",
     "build-release:static-viz": "WEBPACK_BUNDLE=production webpack --config webpack.static-viz.config.js",
+    "build-release:stats": "yarn build-release && WEBPACK_BUNDLE=production NODE_OPTIONS=--max-old-space-size=8196 webpack --profile --json > stats.json",
     "build-shared": "yarn && webpack --config webpack.shared.config.js",
     "build-static-viz": "yarn && yarn build-release:cljs && WEBPACK_BUNDLE=production webpack --config webpack.static-viz.config.js",
     "build-static-viz:watch": "webpack --config webpack.static-viz.config.js --watch",
@@ -445,5 +448,43 @@
   },
   "browserslist": [
     "defaults"
+  ],
+  "size-limit": [
+    {
+      "name": "vendor",
+      "path": [
+        "resources/frontend_client/app/dist/vendor.*.js",
+        "!resources/frontend_client/app/dist/vendor-styles.*.js"
+      ],
+      "running": false,
+      "brotli": false
+    },
+    {
+      "name": "app-main",
+      "path": [
+        "resources/frontend_client/app/dist/app-main.*.js",
+        "!resources/frontend_client/app/dist/*hot*.js"
+      ],
+      "running": false,
+      "brotli": false
+    },
+    {
+      "name": "app-embed",
+      "path": [
+        "resources/frontend_client/app/dist/app-embed.*.js",
+        "!resources/frontend_client/app/dist/*hot*.js"
+      ],
+      "running": false,
+      "brotli": false
+    },
+    {
+      "name": "app-public",
+      "path": [
+        "resources/frontend_client/app/dist/app-public.*.js",
+        "!resources/frontend_client/app/dist/*hot*.js"
+      ],
+      "running": false,
+      "brotli": false
+    }
   ]
 }
