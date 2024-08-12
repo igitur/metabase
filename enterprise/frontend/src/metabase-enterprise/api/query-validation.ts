@@ -1,6 +1,7 @@
 import { Api } from "metabase/api";
 import type {
   Card,
+  CollectionId,
   PaginationRequest,
   PaginationResponse,
 } from "metabase-types/api";
@@ -8,7 +9,7 @@ import type {
 export type CardError = {
   field: string;
   table: string;
-  type: "inactive-field";
+  type: "inactive-field" | "unknown-field";
 };
 export type invalidCardResponse = {
   data: (Card & { errors: CardError[] })[];
@@ -17,6 +18,7 @@ export type invalidCardResponse = {
 export type invalidCardRequest = {
   sort_direction?: "asc" | "desc";
   sort_column?: string;
+  collection_id?: CollectionId | null;
 } & PaginationRequest;
 
 export const queryValidationAPI = Api.injectEndpoints({

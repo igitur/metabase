@@ -3,7 +3,10 @@ import { Link } from "react-router";
 import { t } from "ttag";
 import _ from "underscore";
 
-import { CollectionPickerModal } from "metabase/common/components/CollectionPicker";
+import {
+  CollectionPickerModal,
+  type CollectionPickerValueItem,
+} from "metabase/common/components/CollectionPicker";
 import { StyledControlledTable } from "metabase/common/components/Table";
 import { Ellipsified } from "metabase/core/components/Ellipsified";
 import CS from "metabase/css/core/index.css";
@@ -12,6 +15,7 @@ import { formatDateTimeWithUnit } from "metabase/lib/formatting/date";
 import * as Urls from "metabase/lib/urls";
 import { Title, Box, Icon, Flex, Button } from "metabase/ui";
 import { useGetInvalidCardsQuery } from "metabase-enterprise/api/query-validation";
+import type { RegularCollectionId } from "metabase-types/api";
 
 import { formatErrorString } from "../utils";
 
@@ -23,12 +27,15 @@ const COLUMNS = [
   { name: "Last edited", key: "last_edited_at", sortable: true },
 ];
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 15;
 
 export const QueryValidator = () => {
   const [sortColumn, setSortColumn] = useState<string>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [collectionPickerOpen, setCollectionPickerOpen] = useState(false);
+  const [collectionId, setCollectionId] = useState<
+    RegularCollectionId | undefined
+  >(undefined);
 
   const { setPage, page } = usePagination();
 
@@ -37,7 +44,17 @@ export const QueryValidator = () => {
     sort_direction: sortDirection,
     limit: PAGE_SIZE,
     offset: PAGE_SIZE * page,
+    collection_id: collectionId,
   });
+
+  const handleCollectionChange = (collection: CollectionPickerValueItem) => {
+    if (collection.id === "root") {
+      setCollectionId(undefined);
+    } else {
+      setCollectionId(collection.id);
+    }
+    setCollectionPickerOpen(false);
+  };
 
   const processedData = useMemo(
     () =>
@@ -95,8 +112,8 @@ export const QueryValidator = () => {
       {collectionPickerOpen && (
         <CollectionPickerModal
           title={t`Select a collection`}
-          value={{ id: null, model: "collection" }}
-          onChange={() => {}}
+          value={{ id: collectionId, model: "collection" }}
+          onChange={handleCollectionChange}
           onClose={() => setCollectionPickerOpen(false)}
           options={{
             hasRecents: false,
