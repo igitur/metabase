@@ -39,13 +39,18 @@ export const QueryValidator = () => {
 
   const { setPage, page } = usePagination();
 
-  const { data: invalidCards } = useGetInvalidCardsQuery({
-    sort_column: sortColumn,
-    sort_direction: sortDirection,
-    limit: PAGE_SIZE,
-    offset: PAGE_SIZE * page,
-    collection_id: collectionId,
-  });
+  const { data: invalidCards } = useGetInvalidCardsQuery(
+    {
+      sort_column: sortColumn,
+      sort_direction: sortDirection,
+      limit: PAGE_SIZE,
+      offset: PAGE_SIZE * page,
+      collection_id: collectionId,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const handleCollectionChange = (collection: CollectionPickerValueItem) => {
     if (collection.id === "root") {

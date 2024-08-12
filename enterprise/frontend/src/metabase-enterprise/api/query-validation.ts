@@ -9,7 +9,7 @@ import type {
 export type CardError = {
   field: string;
   table: string;
-  type: "inactive-field" | "unknown-field";
+  type: "inactive-field" | "inactive-table" | "unknown-field" | "unknown-table";
 };
 export type invalidCardResponse = {
   data: (Card & { errors: CardError[] })[];

@@ -82,7 +82,7 @@ export function ControlledTable<Row extends BaseRow>({
         <Flex justify="end">
           <PaginationControls
             page={page}
-            pageSize={3}
+            pageSize={15}
             total={totalItems}
             itemsLength={rows.length}
             onNextPage={() => onPageChange(page + 1)}
